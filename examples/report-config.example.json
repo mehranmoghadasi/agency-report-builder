@@ -1,0 +1,17 @@
+{
+  "client_name": "Acme Hardware",
+  "client_logo_url": "https://acme-hardware.com/wp-content/uploads/logo.png",
+  "agency_name": "Bright Digital Agency",
+  "brand_colour": "#D97706",
+  "ga4_property_id": "properties/123456789",
+  "gsc_site_url": "https://acme-hardware.com/",
+  "date_range": {
+    "start": "2026-04-01",
+    "end": "2026-04-30"
+  },
+  "compare_to_previous": true,
+  "output_dir": "./reports/acme-hardware",
+  "formats": ["html", "pdf"],
+  "credentials_path": "./credentials.json",
+  "top_n": 10
+}

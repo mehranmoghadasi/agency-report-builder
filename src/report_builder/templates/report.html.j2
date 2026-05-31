@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ config.client_name }} — Marketing Performance Report</title>
+  <style>
+    :root {
+      --brand: {{ config.brand_colour }};
+      --brand-light: {{ config.brand_colour }}22;
+      --text: #1a202c;
+      --muted: #718096;
+      --border: #e2e8f0;
+      --bg: #ffffff;
+      --row-alt: #f7fafc;
+      --positive: #38a169;
+      --negative: #e53e3e;
+      --neutral: #718096;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    .header {
+      background: var(--brand);
+      color: #fff;
+      padding: 32px 40px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .header-left h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .header-left p  { font-size: 13px; opacity: 0.85; }
+    .header-right   { text-align: right; font-size: 12px; opacity: 0.8; }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 40px; }
+    .section { margin-bottom: 40px; }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand);
+      border-bottom: 2px solid var(--brand);
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── KPI Cards ──────────────────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 16px;
+      background: var(--row-alt);
+    }
+    .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .kpi-change { font-size: 12px; font-weight: 600; }
+    .positive { color: var(--positive); }
+    .negative { color: var(--negative); }
+    .neutral  { color: var(--neutral); }
+
+    /* ── Tables ──────────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: var(--brand); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    tr:nth-child(even) td { background: var(--row-alt); }
+    tr:hover td { background: var(--brand-light); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .muted-text { color: var(--muted); font-size: 12px; }
+
+    /* ── Channel pills ───────────────────────────────────────── */
+    .pill {
+      display: inline-block;
+      background: var(--brand-light);
+      color: var(--brand);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Two-column layout ───────────────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding: 20px 40px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────────────────── -->
+<div class="header">
+  <div class="header-left">
+    {% if config.client_logo_url %}
+    <img src="{{ config.client_logo_url }}" alt="{{ config.client_name }} logo"
+         style="height:36px; margin-bottom:10px; filter:brightness(0) invert(1);">
+    {% endif %}
+    <h1>{{ config.client_name }}</h1>
+    <p>Marketing Performance Report — {{ report_period }}</p>
+  </div>
+  <div class="header-right">
+    Prepared by {{ config.agency_name }}<br>
+    Generated {{ generated_at }}
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ── GA4 KPI CARDS ───────────────────────────────────────────────────────── -->
+<div class="section">
+  <div class="section-title">Website Performance (GA4)</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Sessions</div>
+      <div class="kpi-value">{{ ga4.kpis.sessions | fmt_int }}</div>
+      <div class="kpi-change {{ ga4_sessions_change | change_class }}">
+        {{ ga4_sessions_change | fmt_pct }} vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Users</div>
+      <div class="kpi-value">{{ ga4.kpis.users | fmt_int }}</div>
+      <div class="kpi-change {{ ga4_users_change | change_class }}">
+        {{ ga4_users_change | fmt_pct }} vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conversions</div>
+      <div class="kpi-value">{{ ga4.kpis.conversions | fmt_int }}</div>
+      <div class="kpi-change {{ ga4_conversions_change | change_class }}">
+        {{ ga4_conversions_change | fmt_pct }} vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conv. Rate</div>
+      <div class="kpi-value">{{ ga4.kpis.conversion_rate }}%</div>
+      <div class="kpi-change neutral">Avg duration: {{ ga4.kpis.avg_session_duration | fmt_duration }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GSC KPI CARDS ────────────────────────────────────────────────────────── -->
+<div class="section">
+  <div class="section-title">Organic Search (Google Search Console)</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Clicks</div>
+      <div class="kpi-value">{{ gsc.kpis.clicks | fmt_int }}</div>
+      <div class="kpi-change {{ gsc_clicks_change | change_class }}">
+        {{ gsc_clicks_change | fmt_pct }} vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Impressions</div>
+      <div class="kpi-value">{{ gsc.kpis.impressions | fmt_int }}</div>
+      <div class="kpi-change {{ gsc_impressions_change | change_class }}">
+        {{ gsc_impressions_change | fmt_pct }} vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Click-Through Rate</div>
+      <div class="kpi-value">{{ gsc.kpis.ctr }}%</div>
+      <div class="kpi-change neutral">Industry avg ~2–5%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg. Position</div>
+      <div class="kpi-value">#{{ gsc.kpis.position }}</div>
+      <div class="kpi-change neutral">Lower is better</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TWO-COLUMN SECTION ──────────────────────────────────────────────────── -->
+<div class="two-col">
+
+  <!-- Channels -->
+  <div class="section">
+    <div class="section-title">Traffic by Channel</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th class="num">Sessions</th>
+          <th class="num">Conv.</th>
+          <th class="num">CVR</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ch in ga4.channels %}
+        <tr>
+          <td><span class="pill">{{ ch.channel }}</span></td>
+          <td class="num">{{ ch.sessions | fmt_int }}</td>
+          <td class="num">{{ ch.conversions | fmt_int }}</td>
+          <td class="num">{{ ch.conversion_rate }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Devices -->
+  <div class="section">
+    <div class="section-title">Device Split</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th class="num">Sessions</th>
+          <th class="num">Share</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dev in ga4.devices %}
+        <tr>
+          <td>{{ dev.device | capitalize }}</td>
+          <td class="num">{{ dev.sessions | fmt_int }}</td>
+          <td class="num">{{ dev.sessions_pct }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── TOP PAGES ──────────────────────────────────────────────────────────── -->
+<div class="section">
+  <div class="section-title">Top Pages (GA4)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Page</th>
+        <th class="num">Pageviews</th>
+        <th class="num">Avg. Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for page in ga4.top_pages %}
+      <tr>
+        <td class="muted-text">{{ loop.index }}</td>
+        <td>
+          {{ page.page_title }}<br>
+          <span class="muted-text">{{ page.page_path }}</span>
+        </td>
+        <td class="num">{{ page.pageviews | fmt_int }}</td>
+        <td class="num">{{ page.avg_engagement_sec | fmt_duration }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ── TOP QUERIES ────────────────────────────────────────────────────────── -->
+<div class="section">
+  <div class="section-title">Top Search Queries (GSC)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Query</th>
+        <th class="num">Clicks</th>
+        <th class="num">Impressions</th>
+        <th class="num">CTR</th>
+        <th class="num">Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in gsc.top_queries %}
+      <tr>
+        <td class="muted-text">{{ loop.index }}</td>
+        <td>{{ q.query }}</td>
+        <td class="num">{{ q.clicks | fmt_int }}</td>
+        <td class="num">{{ q.impressions | fmt_int }}</td>
+        <td class="num">{{ q.ctr }}%</td>
+        <td class="num">#{{ q.position }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /.container -->
+
+<div class="footer">
+  Prepared by {{ config.agency_name }} &nbsp;|&nbsp;
+  {{ report_period }} &nbsp;|&nbsp;
+  Generated {{ generated_at }} &nbsp;|&nbsp;
+  Data sources: Google Analytics 4 · Google Search Console
+</div>
+
+</body>
+</html>
