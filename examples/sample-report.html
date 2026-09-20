@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northside Plumbing (demo) — Marketing Performance Report</title>
+  <style>
+    :root {
+      --brand: #1A56DB;
+      --brand-light: #1A56DB22;
+      --text: #1a202c;
+      --muted: #718096;
+      --border: #e2e8f0;
+      --bg: #ffffff;
+      --row-alt: #f7fafc;
+      --positive: #38a169;
+      --negative: #e53e3e;
+      --neutral: #718096;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    .header {
+      background: var(--brand);
+      color: #fff;
+      padding: 32px 40px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .header-left h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .header-left p  { font-size: 13px; opacity: 0.85; }
+    .header-right   { text-align: right; font-size: 12px; opacity: 0.8; }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 40px; }
+    .section { margin-bottom: 40px; }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand);
+      border-bottom: 2px solid var(--brand);
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 16px;
+      background: var(--row-alt);
+    }
+    .kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .kpi-change { font-size: 12px; font-weight: 600; }
+    .positive { color: var(--positive); }
+    .negative { color: var(--negative); }
+    .neutral  { color: var(--neutral); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: var(--brand); color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    tr:nth-child(even) td { background: var(--row-alt); }
+    tr:hover td { background: var(--brand-light); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .muted-text { color: var(--muted); font-size: 12px; }
+    .pill {
+      display: inline-block;
+      background: var(--brand-light);
+      color: var(--brand);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding: 20px 40px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    
+    <h1>Northside Plumbing (demo)</h1>
+    <p>Marketing Performance Report — 2026-04-01 to 2026-04-30</p>
+  </div>
+  <div class="header-right">
+    Prepared by Demo Agency<br>
+    Generated September 19, 2026 at 11:05 PM
+  </div>
+</div>
+
+<div class="container">
+
+<div class="section">
+  <div class="section-title">Website Performance (GA4)</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Sessions</div>
+      <div class="kpi-value">1,000</div>
+      <div class="kpi-change positive">
+        +11.1% vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Users</div>
+      <div class="kpi-value">800</div>
+      <div class="kpi-change positive">
+        +6.7% vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conversions</div>
+      <div class="kpi-value">40</div>
+      <div class="kpi-change positive">
+        +14.3% vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conv. Rate</div>
+      <div class="kpi-value">4.0%</div>
+      <div class="kpi-change neutral">Avg duration: 2:00</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Organic Search (Google Search Console)</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Clicks</div>
+      <div class="kpi-value">500</div>
+      <div class="kpi-change positive">
+        +11.1% vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Impressions</div>
+      <div class="kpi-value">12,000</div>
+      <div class="kpi-change positive">
+        +9.1% vs prev period
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Click-Through Rate</div>
+      <div class="kpi-value">4.17%</div>
+      <div class="kpi-change neutral">Industry avg ~2–5%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg. Position</div>
+      <div class="kpi-value">#14.3</div>
+      <div class="kpi-change neutral">Lower is better</div>
+    </div>
+  </div>
+</div>
+
+<div class="two-col">
+
+  <div class="section">
+    <div class="section-title">Traffic by Channel</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th class="num">Sessions</th>
+          <th class="num">Conv.</th>
+          <th class="num">CVR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill">Organic Search</span></td>
+          <td class="num">500</td>
+          <td class="num">20</td>
+          <td class="num">4.0%</td>
+        </tr>
+        <tr>
+          <td><span class="pill">Paid Search</span></td>
+          <td class="num">300</td>
+          <td class="num">15</td>
+          <td class="num">5.0%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Device Split</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th class="num">Sessions</th>
+          <th class="num">Share</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mobile</td>
+          <td class="num">600</td>
+          <td class="num">60.0%</td>
+        </tr>
+        <tr>
+          <td>Desktop</td>
+          <td class="num">350</td>
+          <td class="num">35.0%</td>
+        </tr>
+        <tr>
+          <td>Tablet</td>
+          <td class="num">50</td>
+          <td class="num">5.0%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Top Pages (GA4)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Page</th>
+        <th class="num">Pageviews</th>
+        <th class="num">Avg. Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="muted-text">1</td>
+        <td>
+          Home<br>
+          <span class="muted-text">/home</span>
+        </td>
+        <td class="num">800</td>
+        <td class="num">1:30</td>
+      </tr>
+      <tr>
+        <td class="muted-text">2</td>
+        <td>
+          Services<br>
+          <span class="muted-text">/services</span>
+        </td>
+        <td class="num">400</td>
+        <td class="num">2:30</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title">Top Search Queries (GSC)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Query</th>
+        <th class="num">Clicks</th>
+        <th class="num">Impressions</th>
+        <th class="num">CTR</th>
+        <th class="num">Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="muted-text">1</td>
+        <td>plumber edmonton</td>
+        <td class="num">80</td>
+        <td class="num">1,200</td>
+        <td class="num">6.7%</td>
+        <td class="num">#4.2</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<div class="footer">
+  Prepared by Demo Agency &nbsp;|&nbsp;
+  2026-04-01 to 2026-04-30 &nbsp;|&nbsp;
+  Generated September 19, 2026 at 11:05 PM &nbsp;|&nbsp;
+  Data sources: Google Analytics 4 · Google Search Console
+</div>
+
+</body>
+</html>

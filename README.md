@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://python.org/)
+[![Tests](https://img.shields.io/badge/tests-23%20passing-brightgreen?logo=pytest&logoColor=white)](tests/)
 [![Last Commit](https://img.shields.io/github/last-commit/mehranmoghadasi/agency-report-builder)](https://github.com/mehranmoghadasi/agency-report-builder)
 
 > Pull GA4 and Google Search Console data for any client, render a branded HTML report with full KPI comparisons, channel breakdowns, and top queries — then export to PDF in one command.
@@ -53,7 +54,7 @@ Reported repeatedly in [r/digital_marketing](https://www.reddit.com/r/digital_ma
 ## Features
 
 - **Branded per-client config** — client name, logo URL, accent colour, agency name — all via a single JSON file. One config file per client, version-controllable.
-- **GA4 Data API integration** — sessions, users, new users, conversions, conversion rate, avg session duration, bounce rate; channel breakdown; top pages; device split.
+- **GA4 Data API integration** — sessions, users, new users, key events (conversions), key-event rate, avg session duration, bounce rate; channel breakdown; top pages; device split.
 - **GSC Search Analytics integration** — clicks, impressions, CTR, average position; top queries; top pages.
 - **Period-over-period comparison** — automatically computes the previous period of equal length and shows percentage change on every KPI card.
 - **HTML report with professional styling** — CSS variables for instant rebranding; responsive layout with KPI cards, data tables, and two-column sections.
@@ -95,7 +96,7 @@ flowchart TD
 - **CLI** — `click` v8
 - **Terminal UI** — `rich` v13
 - **Validation** — `pydantic` v2
-- **Testing** — `pytest`, `pytest-mock`
+- **Testing** — `pytest` (API parsing is tested against fakes shaped like the real client responses); lint: `ruff`
 
 ---
 
@@ -183,7 +184,7 @@ report-builder preview --config ./configs/acme-hardware.json
 
 ## Sample Output
 
-**`examples/sample-report.html`** — see the `/examples` directory for a rendered HTML report with realistic redacted data.
+**[`examples/sample-report.html`](examples/sample-report.html)** — a real render of the template from the test fixtures (demo client, no live data). Open it in a browser to see the exact layout the PDF is built from.
 
 **Client config example (`report-config.json`):**
 ```json
@@ -235,10 +236,11 @@ agency-report-builder/
 │       └── templates/
 │           └── report.html.j2  # HTML report template
 ├── tests/
-│   └── test_builder.py
+│   ├── test_builder.py       # config, context, template rendering
+│   └── test_api_parsing.py   # GA4 / GSC response parsing against client-shaped fakes
+├── ci/python-app.yml         # GitHub Actions workflow (copy to .github/workflows/)
 ├── docs/
-│   ├── ARCHITECTURE.md
-│   └── USAGE.md
+│   └── ARCHITECTURE.md
 └── examples/
     ├── report-config.example.json
     └── sample-report.html
@@ -250,10 +252,16 @@ agency-report-builder/
 
 Issues and PRs welcome. If you're adding a new data source (e.g. Google Ads), follow the pattern in `ga4.py`: a typed dataclass for results, a `build_*_client()` factory, and a `fetch_*_data()` function.
 
+## Changelog
+
+- **1.1.0 (2026-09-19)** — fixed `pyproject.toml` build backend (`pip install -e .` previously failed); removed the unsupported `orderBy` field from Search Console requests; migrated GA4 metrics from deprecated `conversions` / `sessionConversionRate` to `keyEvents` / `sessionKeyEventRate`; period-over-period rows are now matched on the `dateRange` tag instead of position; template is included in the wheel via `package-data`; added API-parsing tests and the promised `examples/sample-report.html`.
+- **1.0.0** — initial release.
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
 
 ## About the Author
 
-[Mehran Moghadasi](https://github.com/mehranmoghadasi) is a digital marketing specialist focused on SEO, PPC, and analytics tooling. This project automates a task that costs agencies hundreds of hours per year.
+**Mehran Moghadasi** — Digital Marketing & Brand Manager (SEO · Google Ads · Meta Ads · Social Media), Calgary, AB. This project automates the monthly reporting grind that costs agencies hundreds of hours a year.
+[github.com/mehranmoghadasi](https://github.com/mehranmoghadasi) · [linkedin.com/in/mehranmoghadasi](https://www.linkedin.com/in/mehranmoghadasi)

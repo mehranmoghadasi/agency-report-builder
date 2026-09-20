@@ -111,7 +111,7 @@ def load_config(config_path: str | Path | None = None) -> ReportConfig:
         raise FileNotFoundError(
             f"Config file not found: {config_path}\n"
             "Create a report-config.json or pass --config to the CLI.\n"
-            "See docs/USAGE.md for a complete example."
+            "See examples/report-config.example.json for a complete example."
         )
 
     with config_path.open("r", encoding="utf-8") as fh:
