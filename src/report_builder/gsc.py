@@ -16,8 +16,8 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 
-from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
 logger = logging.getLogger(__name__)
 
@@ -181,8 +181,7 @@ def _fetch_queries(
         "startDate": date_start,
         "endDate": date_end,
         "dimensions": ["query"],
-        "rowLimit": top_n,
-        "orderBy": [{"fieldName": "clicks", "sortOrder": "DESCENDING"}],
+        "rowLimit": top_n,  # rows come back sorted by clicks desc; Search Analytics has no orderBy field
     }
     rows = _query(service, site_url, body)
     result = []
@@ -208,8 +207,7 @@ def _fetch_pages(
         "startDate": date_start,
         "endDate": date_end,
         "dimensions": ["page"],
-        "rowLimit": top_n,
-        "orderBy": [{"fieldName": "clicks", "sortOrder": "DESCENDING"}],
+        "rowLimit": top_n,  # rows come back sorted by clicks desc; Search Analytics has no orderBy field
     }
     rows = _query(service, site_url, body)
     result = []

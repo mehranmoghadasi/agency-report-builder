@@ -39,12 +39,12 @@ class DateRange(BaseModel):
         from datetime import datetime
         try:
             datetime.strptime(v, "%Y-%m-%d")
-        except ValueError:
-            raise ValueError(f"Date must be YYYY-MM-DD, got: {v!r}")
+        except ValueError as err:
+            raise ValueError(f"Date must be YYYY-MM-DD, got: {v!r}") from err
         return v
 
     @model_validator(mode="after")
-    def start_before_end(self) -> "DateRange":
+    def start_before_end(self) -> DateRange:
         if self.start >= self.end:
             raise ValueError(f"start ({self.start}) must be before end ({self.end})")
         return self

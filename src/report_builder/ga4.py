@@ -2,7 +2,7 @@
 ga4.py — Google Analytics 4 Data API client.
 
 Fetches key metrics and dimension breakdowns for a reporting period:
-  - Overall KPIs: sessions, users, new users, conversions, conversion rate
+  - Overall KPIs: sessions, users, new users, key events (GA4's name for conversions since 2024), key-event rate
   - Channel breakdown: sessions, conversions per default channel group
   - Top pages: pageviews, average engagement time
   - Device split: sessions by device category
@@ -22,10 +22,8 @@ from google.analytics.data_v1beta.types import (
     DateRange,
     Dimension,
     Metric,
-    RunReportRequest,
     OrderBy,
-    Filter,
-    FilterExpression,
+    RunReportRequest,
 )
 from google.oauth2 import service_account
 
@@ -174,18 +172,32 @@ def _fetch_kpis(
             Metric(name="sessions"),
             Metric(name="totalUsers"),
             Metric(name="newUsers"),
-            Metric(name="conversions"),
-            Metric(name="sessionConversionRate"),
+            Metric(name="keyEvents"),
+            Metric(name="sessionKeyEventRate"),
             Metric(name="averageSessionDuration"),
             Metric(name="bounceRate"),
         ],
     )
     resp = _run_report(client, req)
 
+    return parse_kpi_rows(resp.rows, compare_to_previous)
+
+
+def parse_kpi_rows(rows, compare_to_previous: bool) -> GA4KPIs:
+    """Parse the KPI report. With two date ranges GA4 adds a ``dateRange`` dimension
+    (``date_range_0`` = current, ``date_range_1`` = previous); rows are matched on it
+    rather than on position, which the API does not guarantee."""
     kpis = GA4KPIs()
-    if resp.rows:
-        row = resp.rows[0]
-        vals = [float(v.value) for v in row.metric_values]
+    current, previous = None, None
+    for row in rows:
+        tag = row.dimension_values[0].value if row.dimension_values else "date_range_0"
+        if tag == "date_range_1":
+            previous = row
+        elif current is None:
+            current = row
+
+    if current is not None:
+        vals = [float(v.value) for v in current.metric_values]
         kpis.sessions = int(vals[0])
         kpis.users = int(vals[1])
         kpis.new_users = int(vals[2])
@@ -194,9 +206,8 @@ def _fetch_kpis(
         kpis.avg_session_duration = round(vals[5], 1)
         kpis.bounce_rate = round(vals[6] * 100, 1)
 
-    if compare_to_previous and len(resp.rows) > 1:
-        prev = resp.rows[1]
-        prev_vals = [float(v.value) for v in prev.metric_values]
+    if compare_to_previous and previous is not None:
+        prev_vals = [float(v.value) for v in previous.metric_values]
         kpis.sessions_prev = int(prev_vals[0])
         kpis.users_prev = int(prev_vals[1])
         kpis.conversions_prev = int(prev_vals[3])
@@ -217,8 +228,8 @@ def _fetch_channels(
         dimensions=[Dimension(name="sessionDefaultChannelGroup")],
         metrics=[
             Metric(name="sessions"),
-            Metric(name="conversions"),
-            Metric(name="sessionConversionRate"),
+            Metric(name="keyEvents"),
+            Metric(name="sessionKeyEventRate"),
         ],
         order_bys=[OrderBy(metric=OrderBy.MetricOrderBy(metric_name="sessions"), desc=True)],
         limit=top_n,
