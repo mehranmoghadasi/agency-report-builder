@@ -6,7 +6,7 @@ WeasyPrint renders the HTML (including CSS) and outputs a print-quality PDF.
 
 Requirements:
   - weasyprint >= 61
-  - System packages: pango, cairo, gdk-pixbuf (see docs/USAGE.md for platform setup)
+  - System packages: pango, cairo, gdk-pixbuf (see README Installation for platform setup)
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ def render_pdf(html_string: str, output_path: Path) -> None:
         OSError: If WeasyPrint system dependencies are missing.
     """
     try:
-        from weasyprint import HTML, CSS
+        from weasyprint import CSS, HTML
     except ImportError as exc:
         raise ImportError(
             "WeasyPrint is required for PDF output. Install it with:\n"

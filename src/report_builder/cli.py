@@ -17,19 +17,18 @@ from __future__ import annotations
 
 import sys
 import webbrowser
-from pathlib import Path
 
 import click
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
 from rich import box
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
 
 console = Console()
 
 
 @click.group()
-@click.version_option("1.0.0", prog_name="report-builder")
+@click.version_option("1.1.0", prog_name="report-builder")
 def cli():
     """Generate branded HTML/PDF marketing reports from GA4 and Google Search Console."""
     pass
@@ -44,10 +43,10 @@ def cli():
 @click.option("--dry-run", is_flag=True, help="Validate config only; do not fetch data or write files.")
 def build(config_path: str, formats: tuple[str], dry_run: bool) -> None:
     """Fetch GA4 + GSC data and generate a client performance report."""
+    from .builder import build_report_context, render_html, write_html
     from .config import load_config
     from .ga4 import build_ga4_client, fetch_ga4_data
     from .gsc import build_gsc_client, fetch_gsc_data
-    from .builder import build_report_context, render_html, write_html
     from .pdf import render_pdf
 
     console.print(Panel.fit("[bold cyan]Agency Report Builder[/bold cyan]", border_style="cyan"))
@@ -169,10 +168,10 @@ def validate(config_path: str) -> None:
               help="Path to report-config.json")
 def preview(config_path: str) -> None:
     """Generate HTML report and open it in the default browser."""
+    from .builder import build_report_context, render_html, write_html
     from .config import load_config
     from .ga4 import build_ga4_client, fetch_ga4_data
     from .gsc import build_gsc_client, fetch_gsc_data
-    from .builder import build_report_context, render_html, write_html
 
     config = load_config(config_path)
     config.formats = ["html"]

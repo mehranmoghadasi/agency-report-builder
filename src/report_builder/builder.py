@@ -9,15 +9,15 @@ written as an HTML file or passed to the PDF renderer.
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from .config import ReportConfig
 from .ga4 import GA4ReportData, pct_change
 from .gsc import GSCReportData
-from .config import ReportConfig
 
 logger = logging.getLogger(__name__)
 
