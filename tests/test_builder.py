@@ -2,15 +2,14 @@
 Tests for the report builder and config modules.
 """
 
-import pytest
 from pathlib import Path
-from unittest.mock import MagicMock
 
-from report_builder.config import ReportConfig, DateRange
-from report_builder.ga4 import GA4ReportData, GA4KPIs, ChannelRow, PageRow, DeviceRow, pct_change
-from report_builder.gsc import GSCReportData, GSCKPIs
+import pytest
+
 from report_builder.builder import build_report_context, render_html
-
+from report_builder.config import DateRange, ReportConfig
+from report_builder.ga4 import ChannelRow, DeviceRow, GA4KPIs, GA4ReportData, PageRow, pct_change
+from report_builder.gsc import GSCKPIs, GSCReportData
 
 # ── Config tests ──────────────────────────────────────────────────────────────
 
@@ -50,11 +49,11 @@ class TestDateRange:
         assert dr.start == "2026-04-01"
 
     def test_invalid_format_raises(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError, match="YYYY-MM-DD"):
             DateRange(start="April 1 2026", end="2026-04-30")
 
     def test_start_after_end_raises(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             DateRange(start="2026-05-01", end="2026-04-01")
 
 
@@ -92,7 +91,7 @@ def _make_ga4(sessions=1000, users=800, conversions=40, sessions_prev=900, users
 
 def _make_gsc():
     kpis = GSCKPIs(clicks=500, impressions=12000, ctr=4.17, position=14.3, clicks_prev=450, impressions_prev=11000)
-    from report_builder.gsc import QueryRow, GSCPageRow
+    from report_builder.gsc import GSCPageRow, QueryRow
     queries = [QueryRow("plumber edmonton", 80, 1200, 6.7, 4.2)]
     pages = [GSCPageRow("https://example.com/services", 120, 3000, 4.0, 6.5)]
     return GSCReportData(kpis=kpis, top_queries=queries, top_pages=pages,
