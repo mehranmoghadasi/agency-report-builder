@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://python.org/)
-[![Tests](https://img.shields.io/badge/tests-23%20passing-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![CI](https://github.com/mehranmoghadasi/agency-report-builder/actions/workflows/python-app.yml/badge.svg)](https://github.com/mehranmoghadasi/agency-report-builder/actions/workflows/python-app.yml)
 [![Last Commit](https://img.shields.io/github/last-commit/mehranmoghadasi/agency-report-builder)](https://github.com/mehranmoghadasi/agency-report-builder)
 
 > Pull GA4 and Google Search Console data for any client, render a branded HTML report with full KPI comparisons, channel breakdowns, and top queries — then export to PDF in one command.
@@ -238,7 +238,7 @@ agency-report-builder/
 ├── tests/
 │   ├── test_builder.py       # config, context, template rendering
 │   └── test_api_parsing.py   # GA4 / GSC response parsing against client-shaped fakes
-├── ci/python-app.yml         # GitHub Actions workflow (copy to .github/workflows/)
+├── ci/python-app.yml         # GitHub Actions workflow (also installed at .github/workflows/)
 ├── docs/
 │   └── ARCHITECTURE.md
 └── examples/
